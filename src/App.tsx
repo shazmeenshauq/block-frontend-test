@@ -1,18 +1,8 @@
-import React from 'react';
-import { useAccount, useConnect, useEnsName } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-
-
+import Home from './views/Home';
 function App() {
-  const { address, isConnected } = useAccount()
-  const { data: ensName } = useEnsName({ address })
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  })
   return (
     <div className="App">
-      <p>{address}</p>
-      <button onClick={() => connect()}>COnnect</button>
+      <Home />
     </div>
   );
 }
