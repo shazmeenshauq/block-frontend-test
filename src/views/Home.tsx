@@ -71,7 +71,11 @@ const Home = () => {
                     isConnected &&
                     <>
                         <input type="text" placeholder='Enter Wallet Address' value={receipientAddress} onChange={(e) => setReceipientAddress(e.target.value)} />
-                        <input type="number" placeholder='Enter amount' value={amount} onChange={(e) => setAmount(parseFloat(e.target.value))} />
+                        <input type="number" placeholder='Enter amount' value={amount} onChange={(e) => {
+                            if (parseFloat(e.target.value) < 0 || e.target.value === '') {
+                                return;
+                            } else setAmount(parseFloat(e.target.value))
+                        }} />
                         <Button onClick={handleSubmit}>{sendingTransaction ? 'Please wait...' : 'Send'} </Button>
 
                     </>
@@ -91,7 +95,7 @@ gap:50px;
 min-height:100vh;
 `
 
-const Flex = styled.div`
+const Flex = styled.div` // can also use styled-system for flex , for the time being using custom styling
 display:flex;
 flex-direction: column;
 gap:10px;
