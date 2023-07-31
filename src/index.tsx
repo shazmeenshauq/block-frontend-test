@@ -6,14 +6,24 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { goerli, mainnet } from 'wagmi/chains'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { publicProvider } from 'wagmi/providers/public'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, goerli],
-  [publicProvider()],
+  [
+    publicProvider(),
+    jsonRpcProvider({
+      rpc: () => ({
+        http: 'https://goerli.infura.io/v3/' || '',
+      }),
+    }),
+
+  ],
+
 )
 
 const config = createConfig({
-  autoConnect: true,
+  autoConnect: false,
   publicClient,
   webSocketPublicClient,
   connectors: [

@@ -1,29 +1,33 @@
-import React from 'react'
-import { useAccount, useConnect, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import Button from '../Button'
+import useIsMetamaskInstalled from '../../hooks/useIsMetamaskInstalled'
+import toast from 'react-hot-toast';
 
 const ConnectWallet = () => {
-    const acceptedChain: number = 5
+    const { isMetamaskInstalled } = useIsMetamaskInstalled();
     const { isConnected, isConnecting } = useAccount()
-
-    const { chain } = useNetwork()
-    const { error, switchNetwork } =
-        useSwitchNetwork()
     const { disconnect } = useDisconnect()
     const { connect } = useConnect({
         connector: new InjectedConnector(),
     })
 
-    const handleClick = async () => {
+    const handleClick = () => {
+        if (!isMetamaskInstalled()) {
+            toast.error("Please install Metamask in your browser.", { position: 'top-right' });
+            return 0;
+        }
         if (isConnected) disconnect();
         else {
-            await connect()
-            if (chain?.id !== acceptedChain) switchNetwork?.(acceptedChain)
+            connect()
         }
     }
+
     return (
-        <Button onClick={handleClick}>{isConnected ? 'Disconnect' : isConnecting ? 'Connecting...' : 'Connect Wallet'} </Button>
+        <>
+            <Button onClick={handleClick}>{isConnected ? 'Disconnect' : isConnecting ? 'Connecting...' : 'Connect Wallet'} </Button>
+
+        </>
     )
 }
 
